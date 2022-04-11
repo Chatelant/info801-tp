@@ -10,10 +10,18 @@ class CahierDesCharges:
         self.quantity = quantity
 
 
-def task():
-    print('Starting a task...')
-    sleep(1)
-    print('done')
+class ContreOffre:
+    def __init__(self, requirements, cost, time, quantity):
+        self.requirements = requirements
+        self.cost = cost
+        self.time = time
+        self.quantity = quantity
+
+
+# def task():
+#     print('Starting a task...')
+#     sleep(1)
+#     print('done')
 
 
 def client(conn):
@@ -36,8 +44,13 @@ def maitreOeuvre(l_Client):
     print("Maitre d'Oeuvre : ")
 
 
+def fabricant():
+    print("Fabricant")
+
+
 if __name__ == '__main__':
     # Locks
+    client_lock, maitre_lock, fabricant_lock = Lock()
 
     # Pipes
     client_conn, maitre_conn = Pipe()

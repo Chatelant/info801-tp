@@ -1,3 +1,5 @@
 .vscode
 .code
 .idea
+venv
+src/displays/__pycache__/

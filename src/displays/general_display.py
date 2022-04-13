@@ -8,51 +8,57 @@ import dearpygui.dearpygui as dpg
 
 
 def on_load_maquette1():
-    with dpg.window(label="Maquette", tag="maquette1"):
-        with dpg.node_editor(tag="editor"):
-            client_display.setup()
-            maitre_oeuvre_display.setup()
+    if dpg.get_item_alias("maquette2"): dpg.delete_item("maquette2")
+
+    if not dpg.get_item_alias("maquette1"):
+        with dpg.window(label="Maquette", tag="maquette1"):
+            with dpg.node_editor(tag="editor"):
+                client_display.setup()
+                maitre_oeuvre_display.setup()
+                for i in range(3):
+                    fabricant_display.setup(i)
+
+            # Connecte le client et le maitre d'oeuvre
+            dpg.add_node_link("cl_node1", "mo_node1", parent="editor")
+            dpg.add_node_link("cl_node2", "mo_node2", parent="editor")
+
+            # Connecte le maitre d'oeuvre et les fabricants
             for i in range(3):
-                fabricant_display.setup(i)
+                dpg.add_node_link("mo_node3", "fa_node1_" + str(i), parent="editor")
+                dpg.add_node_link("mo_node4", "fa_node2_" + str(i), parent="editor")
 
-        # Connecte le client et le maitre d'oeuvre
-        dpg.add_node_link("cl_node1", "mo_node1", parent="editor")
-        dpg.add_node_link("cl_node2", "mo_node2", parent="editor")
-
-        # Connecte le maitre d'oeuvre et les fabricants
-        for i in range(3):
-            dpg.add_node_link("mo_node3", "fa_node1_" + str(i), parent="editor")
-            dpg.add_node_link("mo_node4", "fa_node2_" + str(i), parent="editor")
-
-    dpg.set_primary_window("maquette1", True)
+        dpg.set_primary_window("maquette1", True)
 
 
 def on_load_maquette2():
-    with dpg.window(label="Maquette", tag="maquette2"):
-        with dpg.node_editor(tag="editor"):
-            client_display.setup()
-            maitre_oeuvre_display.setup()
+    if dpg.get_item_alias("maquette1"): dpg.delete_item("maquette1")
+
+    if not dpg.get_item_alias("maquette2"):
+        with dpg.window(label="Maquette", tag="maquette2"):
+            with dpg.node_editor(tag="editor"):
+                client_display.setup()
+                maitre_oeuvre_display.setup()
+                for i in range(4):
+                    fournisseur_display.setup(i)
+                for i in range(2):
+                    transporteur_display.setup(i)
+
+            # Connecte le client et le maitre d'oeuvre
+            dpg.add_node_link("cl_node1", "mo_node1", parent="editor")
+            dpg.add_node_link("cl_node2", "mo_node2", parent="editor")
+
+            # TODO : update pour que le maitre d'oeuvre aient 2 nodes en plus (2 connectés au fournisseurs, 2 au transporteurs
+            # Connecte le maitre d'oeuvre et les fournisseurs
             for i in range(4):
-                fournisseur_display.setup(i)
+                dpg.add_node_link("mo_node3", "fo_node1_" + str(i), parent="editor")
+                dpg.add_node_link("mo_node4", "fo_node2_" + str(i), parent="editor")
+
+            # Connecte le maitre d'oeuvre et les transporteurs
             for i in range(2):
-                transporteur_display.setup(i)
+                dpg.add_node_link("mo_node3", "tr_node1_" + str(i), parent="editor")
+                dpg.add_node_link("mo_node4", "tr_node2_" + str(i), parent="editor")
 
-        # Connecte le client et le maitre d'oeuvre
-        dpg.add_node_link("cl_node1", "mo_node1", parent="editor")
-        dpg.add_node_link("cl_node2", "mo_node2", parent="editor")
-
-        # TODO : update pour que le maitre d'oeuvre aient 2 nodes en plus (2 connectés au fournisseurs, 2 au transporteurs
-        # Connecte le maitre d'oeuvre et les fournisseurs
-        for i in range(4):
-            dpg.add_node_link("mo_node3", "fo_node1_" + str(i), parent="editor")
-            dpg.add_node_link("mo_node4", "fo_node2_" + str(i), parent="editor")
-
-        # Connecte le maitre d'oeuvre et les transporteurs
-        for i in range(2):
-            dpg.add_node_link("mo_node3", "tr_node1_" + str(i), parent="editor")
-            dpg.add_node_link("mo_node4", "tr_node2_" + str(i), parent="editor")
-
-    dpg.set_primary_window("maquette2", True)
+        dpg.set_primary_window("maquette2", True)
 
 
 def on_start():
@@ -76,5 +82,4 @@ def init_display():
     dpg.destroy_context()
 
 
-# TODO : corriger bug où crash si clic bouton alors qu'une Maquette est déjà affichée
 init_display()

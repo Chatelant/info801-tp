@@ -7,4 +7,4 @@ class CahierDesCharges:
         self.version = version
 
     def __str__(self):
-        print(f"CahierDesCharges : V{self.version} cost={self.cost} time={self.time} quantity={self.quantity} requirements={self.requirements}")
+        return f"CahierDesCharges : V{self.version} cost={self.cost} time={self.time} quantity={self.quantity} requirements={self.requirements}"

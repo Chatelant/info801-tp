@@ -3,4 +3,4 @@ class Produit:
         self.name = name
 
     def __str__(self):
-        print(f"Produit : name={self.name}")
+        return f"Produit : name={self.name}"

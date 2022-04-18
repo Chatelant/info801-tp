@@ -1,6 +1,6 @@
 from multiprocessing import Queue, Process
 
-from fabricant import Fabricant
+from fabricant_old import Fabricant
 from src.entities.objects.action_enum import Action
 
 NB_FABRICANT = 3

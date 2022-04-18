@@ -7,7 +7,7 @@ import transporteur_display
 import dearpygui.dearpygui as dpg
 
 
-def on_load_maquette1():
+def on_load_maquette1(nb_fab):
     if dpg.get_item_alias("maquette2"): dpg.delete_item("maquette2")
 
     if not dpg.get_item_alias("maquette1"):
@@ -23,7 +23,7 @@ def on_load_maquette1():
             dpg.add_node_link("cl_node2", "mo_node2", parent="editor")
 
             # Connecte le maitre d'oeuvre et les fabricants
-            for i in range(3):
+            for i in range(nb_fab):
                 dpg.add_node_link("mo_node3", "fa_node1_" + str(i), parent="editor")
                 dpg.add_node_link("mo_node4", "fa_node2_" + str(i), parent="editor")
 
@@ -69,11 +69,11 @@ def on_start():
     # maitre_oeuvre_display.update("mo_line1", "???")
 
 
-def init_display():
+def init_display(nb_fab):
     dpg.create_context()
     with dpg.window(label="Application"):
-        dpg.add_button(label="Maquette Fabricant", callback=on_load_maquette1)
-        dpg.add_button(label="Maquette Fournisseur et Transporteur", callback=on_load_maquette2)
+        dpg.add_button(label="Maquette Fabricant", callback=on_load_maquette1, args=nb_fab)
+        # dpg.add_button(label="Maquette Fournisseur et Transporteur", callback=on_load_maquette2)
         dpg.add_button(label="Simulation", callback=on_start)
 
     dpg.create_viewport(title='Supply Chain Management', width=1280, height=720)
@@ -82,5 +82,4 @@ def init_display():
     dpg.start_dearpygui()
     dpg.destroy_context()
 
-
-init_display()
+# init_display(3)

@@ -18,21 +18,26 @@ def client(client_MO_Q, log):
     while not offre_acceptee:
         # Format de contre_offre : {Action.CONTRE_OFFRE: CahierDesCharges}
         contre_offre = client_MO_Q.get()
-        if demanderClientFront(contre_offre):
-            log.put("Le client accepte l'offre : " + contre_offre)
-            offre_acceptee = True
-            client_MO_Q.put({
-                Action.ACCEPTE_OFFRE: contre_offre
-            })
-        else:
-            log.put("Le client a refusé l'offre : " + contre_offre)
-            client_MO_Q.put({
-                Action.REFUSE_OFFRE: contre_offre
-            })
+        log.put("Contre offre : " + str(contre_offre))
+        try:
+            contre_offre = contre_offre[Action.CONTRE_OFFRE]
+            if demanderClientFront(contre_offre):
+                log.put("Le client accepte l'offre : " + str(contre_offre))
+                offre_acceptee = True
+                client_MO_Q.put({
+                    Action.ACCEPTE_OFFRE: contre_offre
+                })
+            else:
+                log.put("Le client a refusé l'offre : " + str(contre_offre))
+                client_MO_Q.put({
+                    Action.REFUSE_OFFRE: contre_offre
+                })
+        except KeyError:
+            log.put("Client tjrs en attente")
 
     # Reception du produit.py
     produit = client_MO_Q.get()[Action.PRODUIT]
-    log.put("Le client a recu le produit.py :" + produit)
+    log.put("Le client a recu le produit.py :" + str(produit))
 
 
 def demanderClientFront(contre_offre):

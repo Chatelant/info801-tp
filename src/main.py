@@ -3,6 +3,7 @@ from multiprocessing import Process, Lock, Pipe, Queue
 
 from src.entities import objects
 
+# from src.displays.general_display import Display
 from src.entities.client import client
 from src.entities.maitre_oeuvre import maitre_oeuvre
 
@@ -38,9 +39,8 @@ if __name__ == '__main__':
     MO.start()
     client.start()
 
+    # lance l'affichage
+    # Display(3)
+
     while True:
         print(debug.get())
-
-    client(client_MO_Q, debug).join()
-    MO(client_MO_Q, debug).join()
-

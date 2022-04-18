@@ -1,7 +1,11 @@
 from time import sleep, perf_counter, time
-from multiprocessing import Process, Lock, Pipe
+from multiprocessing import Process, Lock, Pipe, Queue
 
 from src.entities import objects
+
+from src.entities.client import client
+from src.entities.maitre_oeuvre import maitre_oeuvre
+
 
 # TODO : trier les objets de entities/objects
 # TODO : rédiger les entities (class + methodes)
@@ -15,13 +19,6 @@ from src.entities import objects
 #     print('done')
 
 
-def client(conn):
-    # Création du cahier des charges
-    print("Client : Elaboration du cahier des charges")
-    cdc = objects.CahierDesCharges(["Du pain", "Des sandwich"], 10000, 5, 20)
-    print("Envoie sur le pipe")
-    conn.send(cdc)
-    conn.close()
 
     # Synchronisations de deux process
     # lockMaitre.aquire()
@@ -30,26 +27,20 @@ def client(conn):
     # finally:
     #     lockMaitre.release()
 
-
-def maitreOeuvre(l_Client):
-    print("Maitre d'Oeuvre : ")
-
-
-def fabricant():
-    print("Fabricant")
-
-
 if __name__ == '__main__':
-    # Locks
-    client_lock, maitre_lock, fabricant_lock = Lock()
 
-    # Pipes
-    client_conn, maitre_conn = Pipe()
+    client_MO_Q = Queue()
+    debug = Queue()
 
-    # Threads
-    p = Process(target=client, args=(client_conn,))
-    p.start()
+    client = Process(target=client, args=(client_MO_Q, debug,))
+    MO = Process(target=maitre_oeuvre, args=(client_MO_Q, debug,))
 
-    print(maitre_conn.recv().requirements)
+    MO.start()
+    client.start()
 
-    p.join()
+    while True:
+        print(debug.get())
+
+    client(client_MO_Q, debug).join()
+    MO(client_MO_Q, debug).join()
+

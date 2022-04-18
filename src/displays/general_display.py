@@ -62,10 +62,11 @@ def on_load_maquette2():
 
 
 def on_start():
-    client_display.update("cl_line1", "AHHHHHHHHHHH")
-    client_display.update("cl_line2", "AHHHHHHHHHHH")
-    client_display.update("cl_line3", "AHHHHHHHHHHH")
-    maitre_oeuvre_display.update("mo_line1", "???")
+    print("TODO")
+    # client_display.update("cl_line1", "AHHHHHHHHHHH")
+    # client_display.update("cl_line2", "AHHHHHHHHHHH")
+    # client_display.update("cl_line3", "AHHHHHHHHHHH")
+    # maitre_oeuvre_display.update("mo_line1", "???")
 
 
 def init_display():

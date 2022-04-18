@@ -1,7 +1,8 @@
 from src.entities.objects.action_enum import Action
 from src.entities.objects.cahier_des_charges import CahierDesCharges
 
-def Client(client_MO_Q, log):
+
+def client(client_MO_Q, log):
     # Demande de produit.py
     log.put("Le client demande un produit.py")
     client_MO_Q.put({
@@ -15,7 +16,7 @@ def Client(client_MO_Q, log):
     offre_acceptee = False
 
     while not offre_acceptee:
-        #Format de contre_offre : {Action.CONTRE_OFFRE: CahierDesCharges}
+        # Format de contre_offre : {Action.CONTRE_OFFRE: CahierDesCharges}
         contre_offre = client_MO_Q.get()
         if demanderClientFront(contre_offre):
             log.put("Le client accepte l'offre : " + contre_offre)

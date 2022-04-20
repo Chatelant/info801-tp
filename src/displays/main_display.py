@@ -16,7 +16,7 @@ class Display:
     def __init__(self):
         self.cl_display = ClientDisplay()
         self.mo_display = MODisplay()
-        self.fab_display = FabDisplay()
+        self.fab_display = [FabDisplay(), FabDisplay(), FabDisplay()]
         self.on_init()
 
     def on_load_maquette(self):
@@ -26,7 +26,7 @@ class Display:
                     self.cl_display.setup()
                     self.mo_display.setup()
                     for i in range(NB_FABRICANT):
-                        self.fab_display.setup(i)
+                        self.fab_display[i].setup(i)
 
                 # Connecte le client et le maitre d'oeuvre
                 dpg.add_node_link("cl_node1", "mo_node1", parent="editor")
@@ -58,7 +58,7 @@ class Display:
             elif message[0] == "MO":
                 self.mo_display.update(message[1], message[2])
             elif message[0] == "FAB":
-                self.fab_display.update(message[1], message[2])
+                self.fab_display[message[1]].update(message[2], message[3])
 
         print("FIN")
 

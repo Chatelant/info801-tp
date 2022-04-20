@@ -4,13 +4,14 @@ import dearpygui.dearpygui as dpg
 width = 700
 height = 200
 
+
 class FabDisplay:
     def __init__(self):
         self.nb = -1
 
     def setup(self, i):
         w = width
-        h = (i * height) + 40 # défini la position de départ de la fenêtre "fabricant"
+        h = (i * height) + 40  # défini la position de départ de la fenêtre "fabricant"
         self.nb = i
         with dpg.node(label="Fabricant " + str(self.nb), pos=[w, h], ):
             with dpg.node_attribute(tag="fa_node1_" + str(self.nb)):

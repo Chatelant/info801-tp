@@ -15,7 +15,7 @@ def maitre_oeuvre(client_MO_Q, log):
     log.put(["MO", "Maitre d'oeuvre a reçu le cdc du client", 1])
 
     Queues_MO_Fabricant = [Queue() for i in range(NB_FABRICANT)]
-    Fabricants = [Process(target=Fabricant, args=(Queues_MO_Fabricant[i], log)) for i in range(NB_FABRICANT)]
+    Fabricants = [Process(target=Fabricant, args=(i, Queues_MO_Fabricant[i], log)) for i in range(NB_FABRICANT)]
     for fabricant in Fabricants:
         fabricant.start()
 

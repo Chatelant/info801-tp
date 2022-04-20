@@ -6,11 +6,9 @@ from src.entities.objects.produit import Produit
 
 
 def Fabricant(MOD_fabricant_Q, log):
-    log.put("Fabricant start")
     # Recuperation du cdc
     cahier_des_charges = MOD_fabricant_Q.get()[Action.APPEL_OFFRE]
-    log.put("Le fabricant a reçu le cahier des charges : " + str(cahier_des_charges))
-    # time.sleep(random.randint(5, 7))
+    log.put(["FAB", "Le fabricant a reçu le cahier des charges : " + str(cahier_des_charges), 1])
 
     # Envoie d'une contre offre
     MOD_fabricant_Q.put({
@@ -21,5 +19,6 @@ def Fabricant(MOD_fabricant_Q, log):
                                               "Nouveauversion")
     })
 
+    log.put(["FAB", "Le fabricant a envoyé la contre offre", 4])
     while True:
         time.sleep(1)

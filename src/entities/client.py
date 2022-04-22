@@ -1,8 +1,11 @@
+from time import sleep
+
 from src.entities.objects.action_enum import Action
 from src.entities.objects.cahier_des_charges import CahierDesCharges
 
 
 def client(client_MO_Q, log):
+    sleep(1.5)
     # Demande de produit.py
     log.put("Le client demande un produit.py")
     client_MO_Q.put({
@@ -36,8 +39,8 @@ def client(client_MO_Q, log):
             log.put("Client tjrs en attente")
 
     # Reception du produit.py
-    produit = client_MO_Q.get()[Action.PRODUIT]
-    log.put("Le client a recu le produit.py :" + str(produit))
+    produit = client_MO_Q.get()
+    log.put("Le client a recu le produit :" + str(produit))
 
 
 def demanderClientFront(contre_offre):

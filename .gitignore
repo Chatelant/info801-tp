@@ -3,3 +3,4 @@
 .idea
 venv
 src/displays/__pycache__/
+*.pyc

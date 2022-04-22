@@ -8,18 +8,33 @@ from src.entities.objects.produit import Produit
 def Fabricant(MOD_fabricant_Q, log):
     log.put("Fabricant start")
     # Recuperation du cdc
-    cahier_des_charges = MOD_fabricant_Q.get()[Action.APPEL_OFFRE]
-    log.put("Le fabricant a reçu le cahier des charges : " + str(cahier_des_charges))
-    # time.sleep(random.randint(5, 7))
-
-    # Envoie d'une contre offre
-    MOD_fabricant_Q.put({
-        Action.CONTRE_OFFRE: CahierDesCharges("Nouveaurequirements",
-                                              "Nouveaucost",
-                                              "Nouveautime",
-                                              "Nouveauquantity",
-                                              "Nouveauversion")
-    })
+    # cahier_des_charges = MOD_fabricant_Q.get()[Action.APPEL_OFFRE]
 
     while True:
-        time.sleep(1)
+        message = MOD_fabricant_Q.get()
+        log.put("Le fabricant a reçu message")
+
+
+        # Un autre fabricant s'occupe du cahier des charges
+        if Action.OFFRE_KO in message:
+            log.put("Fabricant KO")
+
+            break
+        # Ce fabricant s'occupe du cahier des charges (donc de faire le produit)
+        elif Action.OFFRE_OK in message:
+            log.put("Fabricant OK")
+            time.sleep(random.randint(5, 7))
+            MOD_fabricant_Q.put({
+                Action.PRODUIT: Produit("Super produit")
+            })
+
+        # Offre toujours en négociation
+        else:
+            log.put("Fabricant envoie une contre offre")
+            MOD_fabricant_Q.put({
+                Action.CONTRE_OFFRE: CahierDesCharges("Nouveaurequirements",
+                                                      "Nouveaucost",
+                                                      "Nouveautime",
+                                                      "Nouveauquantity",
+                                                      "Nouveauversion")
+            })

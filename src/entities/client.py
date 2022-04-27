@@ -36,7 +36,7 @@ def client(client_MO_Q, log):
                     Action.REFUSE_OFFRE: contre_offre
                 })
         except KeyError:
-            log.put("Client tjrs en attente")
+            pass
 
     # Reception du produit.py
     produit = client_MO_Q.get()

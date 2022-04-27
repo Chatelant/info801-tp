@@ -27,15 +27,9 @@ class FabDisplay:
                 pass
 
     def update(self, val, nb):
-        if nb == 1:
-            dpg.set_value("fa_line" + str(nb) + "_" + str(self.nb), val)
-            time.sleep(2)
-            dpg.set_value("fa_line2_" + str(self.nb), "Etudie le cahier des charges")
-            time.sleep(2)
-            dpg.set_value("fa_line3_" + str(self.nb), "Rédige la contre offre")
-        else:
-            dpg.set_value("fa_line" + str(nb) + "_" + str(self.nb), val)
-            dpg.set_value("fa_line1_" + str(self.nb), "")
-            dpg.set_value("fa_line2_" + str(self.nb), "")
-            dpg.set_value("fa_line3_" + str(self.nb), "")
+        for i in range(4):
+            if i + 1 == nb:
+                dpg.set_value("fa_line" + str(nb) + "_" + str(self.nb), val)
+            else:
+                dpg.set_value("fa_line" + str(i + 1) + "_" + str(self.nb), "")
         time.sleep(2)

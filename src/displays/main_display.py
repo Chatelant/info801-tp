@@ -1,3 +1,4 @@
+
 from src.displays.client_display import ClientDisplay
 from src.displays.maitre_oeuvre_display import MODisplay
 from src.displays.fabricant_display import FabDisplay
@@ -42,25 +43,35 @@ class Display:
     def on_start(self):
         client_MO_Q = Queue()
         debug = Queue()
+        dialog_user = Queue()
+        dialog_display = Queue()
 
         client = Client()
 
-        CL = Process(target=client.client, args=(client_MO_Q, debug,))
-        MO = Process(target=maitre_oeuvre, args=(client_MO_Q, debug,))
+        CL = Process(target=client.client, args=(client_MO_Q, debug, dialog_user, dialog_display))
+        MO = Process(target=maitre_oeuvre, args=(client_MO_Q, debug, dialog_user, dialog_display))
 
         CL.start()
         MO.start()
 
         while not client.produit_fini:
-            message = debug.get()
-            if message[0] == "CL":
-                self.cl_display.update(message[1], message[2])
-            elif message[0] == "MO":
-                self.mo_display.update(message[1], message[2])
-            elif message[0] == "FAB":
-                self.fab_display[message[1]].update(message[2], message[3])
+            try:
+                dialog_recv = dialog_display.get(False)
+                print("Le client demande : " + dialog_recv)
+                dialog_user.put(input("Réponse :"))
+            except:
+                pass
 
-        print("FIN")
+            try:
+                message = debug.get(False)
+                if message[0] == "CL":
+                    self.cl_display.update(message[1], message[2])
+                elif message[0] == "MO":
+                    self.mo_display.update(message[1], message[2])
+                elif message[0] == "FAB":
+                    self.fab_display[message[1]].update(message[2], message[3])
+            except:
+                pass
 
     def on_init(self):
         dpg.create_context()

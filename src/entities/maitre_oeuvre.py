@@ -1,3 +1,4 @@
+import random
 import time
 from multiprocessing import Queue, Process
 
@@ -7,7 +8,7 @@ from src.entities.fabricant import Fabricant
 from src.entities.objects.action_enum import Action
 
 
-def maitre_oeuvre(client_MO_Q, log):
+def maitre_oeuvre(client_MO_Q, log, dialog_user, dialog_display):
     Queues_MO_Fabricant = [Queue() for i in range(NB_FABRICANT)]
     Fabricants = [Process(target=Fabricant, args=(i, Queues_MO_Fabricant[i], log)) for i in range(NB_FABRICANT)]
     for fabricant in Fabricants:
@@ -22,6 +23,8 @@ def maitre_oeuvre(client_MO_Q, log):
 
     index_fabricant_retenu = -1
     while index_fabricant_retenu == -1:
+        time.sleep(SLEEP_TIME)
+
         log.put(["MO", "Envoi des appels d'offre aux fabricants", 3])
         for queue in Queues_MO_Fabricant:
             queue.put({
@@ -30,7 +33,8 @@ def maitre_oeuvre(client_MO_Q, log):
 
         # On se met en attente de la réponse des fabricants
         contre_offres = []
-        log.put(["MO", "Attends les contres offres...", 4])
+        time.sleep(SLEEP_TIME)
+        log.put(["MO", "Attends les contres offres...  " + str(random.random()), 4])
         for queue in Queues_MO_Fabricant:
             contre_offre = queue.get()[Action.CONTRE_OFFRE]
             contre_offres.append(contre_offre)
@@ -39,7 +43,8 @@ def maitre_oeuvre(client_MO_Q, log):
         log.put(["MO", "A reçu toutes les contres offres", 4])
 
         for index, contre_offre in enumerate(contre_offres):
-            log.put(["MO", "Envoie une contre offre au client", 2])
+            time.sleep(SLEEP_TIME)
+            log.put(["MO", f"Envoie la contre offre {index} au client", 2])
             client_MO_Q.put({Action.CONTRE_OFFRE: contre_offre})
             reponse = client_MO_Q.get()
             if Action.ACCEPTE_OFFRE in reponse:
@@ -50,6 +55,7 @@ def maitre_oeuvre(client_MO_Q, log):
         # log.put("Index avant cond = " + str(index_fabricant_retenu))
         if index_fabricant_retenu != -1:
             for i in range(NB_FABRICANT):
+                time.sleep(SLEEP_TIME)
                 # TODO : probleme :
                 if i == index_fabricant_retenu:
                     log.put(["MO", f"Le client a accepté l'offre du fabricant {i}", 1])

@@ -28,4 +28,4 @@ class MODisplay:
                  dpg.set_value("mo_line" + str(tag_nb), val)
             else:
                 dpg.set_value("mo_line" + str(i+1), "")
-        time.sleep(2)
+        #time.sleep(2)

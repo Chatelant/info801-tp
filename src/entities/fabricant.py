@@ -3,6 +3,7 @@ import time
 from src.entities.objects.action_enum import Action
 from src.entities.objects.cahier_des_charges import CahierDesCharges
 from src.entities.objects.produit import Produit
+from src.config import *
 
 
 def Fabricant(i, MOD_fabricant_Q, log):
@@ -17,13 +18,18 @@ def Fabricant(i, MOD_fabricant_Q, log):
 
         # Un autre fabricant s'occupe du cahier des charges
         if Action.OFFRE_KO in message:
+            time.sleep(SLEEP_TIME)
             log.put(["FAB", i, "Offre refusée, message reçu", 1])
+            time.sleep(SLEEP_TIME)
             log.put(["FAB", i, "", 1])
             break
         # Ce fabricant s'occupe du cahier des charges (donc de faire le produit)
         elif Action.OFFRE_OK in message:
+            time.sleep(SLEEP_TIME)
             log.put(["FAB", i, "Demande de produit reçu", 1])
+            time.sleep(SLEEP_TIME)
             log.put(["FAB", i, "Produit en cours de fabrication", 1])
+            time.sleep(SLEEP_TIME)
             log.put(["FAB", i, "Envoie du produit fini", 4])
             MOD_fabricant_Q.put({
                 Action.PRODUIT: Produit(f"Fabricant {id} : Super produit")
@@ -31,9 +37,13 @@ def Fabricant(i, MOD_fabricant_Q, log):
 
         # Offre toujours en négociation
         else:
+            time.sleep(SLEEP_TIME)
             log.put(["FAB", i, f"Reçoit le cahier des charges", 1])
-            log.put(["FAB", i, "Etudie le cahier des charges", 2])
-            log.put(["FAB", i, "Rédige la contre offre", 3])
+            time.sleep(SLEEP_TIME)
+            log.put(["FAB", i, "Etudie le cahier des charges " + str(i), 2])
+            time.sleep(SLEEP_TIME)
+            log.put(["FAB", i, "Rédige la contre offre " + str(i), 3])
+            time.sleep(SLEEP_TIME)
             log.put(["FAB", i, f"Envoie une contre offre", 4])
             MOD_fabricant_Q.put({
                 Action.CONTRE_OFFRE: CahierDesCharges("Nouveaurequirements",
@@ -42,3 +52,4 @@ def Fabricant(i, MOD_fabricant_Q, log):
                                                       "Nouveauquantity",
                                                       "Nouveauversion")
             })
+        time.sleep(2)

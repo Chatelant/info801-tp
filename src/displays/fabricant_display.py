@@ -32,4 +32,4 @@ class FabDisplay:
                 dpg.set_value("fa_line" + str(nb) + "_" + str(self.nb), val)
             else:
                 dpg.set_value("fa_line" + str(i + 1) + "_" + str(self.nb), "")
-        time.sleep(2)
+        #time.sleep(2)

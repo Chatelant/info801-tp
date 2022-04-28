@@ -23,4 +23,4 @@ class ClientDisplay:
         elif tag_nb == 2:
             dpg.set_value("cl_line1", "")
             dpg.set_value("cl_line2", val)
-        time.sleep(2)
+        #time.sleep(2)

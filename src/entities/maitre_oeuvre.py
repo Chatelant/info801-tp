@@ -34,12 +34,11 @@ def maitre_oeuvre(client_MO_Q, log, dialog_user, dialog_display):
         # On se met en attente de la réponse des fabricants
         contre_offres = []
         time.sleep(SLEEP_TIME)
-        log.put(["MO", "Attends les contres offres...  " + str(random.random()), 4])
+        log.put(["MO", "Attends les contres offres...  ", 4])
         for queue in Queues_MO_Fabricant:
             contre_offre = queue.get()[Action.CONTRE_OFFRE]
             contre_offres.append(contre_offre)
 
-        # log.put(["MO", "MO a toutes les contres offres : " + str(contre_offres), 4])
         log.put(["MO", "A reçu toutes les contres offres", 4])
 
         for index, contre_offre in enumerate(contre_offres):
@@ -48,27 +47,25 @@ def maitre_oeuvre(client_MO_Q, log, dialog_user, dialog_display):
             client_MO_Q.put({Action.CONTRE_OFFRE: contre_offre})
             reponse = client_MO_Q.get()
             if Action.ACCEPTE_OFFRE in reponse:
-                index_fabricant_retenu = index  # TODO is this true ?
+                index_fabricant_retenu = index
                 # log.put(["MO", "Index fab retenu : " + str(index_fabricant_retenu), 3])
                 break
 
-        # log.put("Index avant cond = " + str(index_fabricant_retenu))
         if index_fabricant_retenu != -1:
             for i in range(NB_FABRICANT):
                 time.sleep(SLEEP_TIME)
-                # TODO : probleme :
                 if i == index_fabricant_retenu:
                     log.put(["MO", f"Le client a accepté l'offre du fabricant {i}", 1])
                 else:
                     Queues_MO_Fabricant[i].put({
-                        Action.OFFRE_KO: True
+                        Action.OFFRE_KO: contre_offres[index_fabricant_retenu]
                     })
                     log.put(["MO", f"Le client a refusé l'offre du fabricant {i}", 1])
                     log.put(["MO", f"Offre du fabricant {i} refusée", 3])
 
             log.put(["MO", f"Demande au fabricant {index_fabricant_retenu} le produit fini", 3])
             Queues_MO_Fabricant[index_fabricant_retenu].put({
-                Action.OFFRE_OK: True
+                Action.OFFRE_OK: contre_offres[index_fabricant_retenu]
             })
             produit = Queues_MO_Fabricant[index_fabricant_retenu].get()
             log.put(["MO", "Reçoit le produit fini", 4])

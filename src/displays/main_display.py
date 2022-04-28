@@ -1,4 +1,3 @@
-
 from src.displays.client_display import ClientDisplay
 from src.displays.maitre_oeuvre_display import MODisplay
 from src.displays.fabricant_display import FabDisplay
@@ -17,10 +16,13 @@ class Display:
     def __init__(self):
         self.cl_display = ClientDisplay()
         self.mo_display = MODisplay()
-        self.fab_display = [FabDisplay(), FabDisplay(), FabDisplay()]
+        self.fab_display = []
         self.on_init()
 
     def on_load_maquette(self):
+        for i in range(NB_FABRICANT):
+            self.fab_display.append(FabDisplay())
+
         if not dpg.get_item_alias("maquette"):
             with dpg.window(label="Maquette", tag="maquette"):
                 with dpg.node_editor(tag="editor"):
